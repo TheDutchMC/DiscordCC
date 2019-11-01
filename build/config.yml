@@ -1,0 +1,22 @@
+#DiscordPlugin by TheDutchMC76 config file
+
+#The bot's token.
+BotToken: 0
+
+#Minecraft chat link channel ID
+ChatLinkChannelId: 0
+
+#Bot Command channel ID
+botCommandChannelId: 0
+
+#Command Prefix. Default: $
+CommandPrefix: $
+
+#Whitelist role ID.
+WhitelistRoleID: 0
+
+#Do we enable the whitelisting system
+EnableWhitelisting: true
+
+#Do we restrict where bot commands can be used
+RestrictBotCommandsToChannel: false

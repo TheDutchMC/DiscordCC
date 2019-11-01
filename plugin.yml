@@ -1,0 +1,5 @@
+name: DiscordPlugin
+main: nl.thedutchmc.discordplugin.DiscordPlugin
+version: 1.0.0
+author: TheDutchMC
+description: Discord tools I use
