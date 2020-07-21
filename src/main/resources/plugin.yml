@@ -1,0 +1,8 @@
+name: DiscordCC
+main: nl.thedutchmc.discordCC.DiscordCC
+version: @version@
+description: Allows you to manage your server's console from Discord and have a minecraft-discord chat link
+author: TheDutchMC
+api-version: 1.16
+load: STARTUP
+

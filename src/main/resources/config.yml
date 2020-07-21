@@ -1,0 +1,20 @@
+#The bot's token. You can get this on Discord's Developer portal
+botToken: ""
+
+#The channel ID of the channel where console will be
+consoleChannel: ""
+
+#The channel ID of the channel where regular chat be
+chatChannel: ""
+
+#What prefix should messages in-game have. Default: [Discord]. This field may be left empty, but you do need to leave the quotation marks! 
+ingamePrefixDiscordMessages: "[Discord]"
+
+#What hex color should the prefix have. Note: do not include the pound/hashtag symbol! Default: 
+ingamePrefixDiscordMessagesHexColor: "D3D3D3"
+
+#Should console be enabled. Default: true
+consoleEnabled: "true"
+
+#Should chat be enabled. Default: true
+chatEnabled: "true"
