@@ -8,6 +8,8 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class ConsoleAppender extends AbstractAppender {
 	
 
@@ -24,7 +26,10 @@ public class ConsoleAppender extends AbstractAppender {
 		
 		final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 		
-		final String finalLogMessage = "[" + formatter.format(new Date(event.getTimeMillis())) + " " + event.getLevel().toString() + "] " + log.getMessage().getFormattedMessage();
+		final String finalLogMessage = ChatColor.stripColor(
+				"[" + formatter.format(new Date(event.getTimeMillis())) 
+				+ " " + event.getLevel().toString() + "] "
+				+ log.getMessage().getFormattedMessage());
 		
 		if(!DiscordCC.INSTANCE.isEnabled()) return;
 		

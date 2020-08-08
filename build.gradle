@@ -54,40 +54,28 @@ dependencies {
 
 }
 
-//Used in both releaseJar and testJar, so added a common task
-shadowJar {
-	
-	relocate 'net.dv8tion', 'nl.thedutchmc.libs.dv8tion'
-	//relocate 'org.slf4j', 'nl.thedutchmc.libs.slf4j'
-	//relocate 'org.apache.logging.log4j', 'nl.thedutchmc.libs.log4j'
-	classifier 'DEV'
-	destinationDir = file("$rootDir/server/plugins")
-	
-}
-
-shadowJar.dependsOn(build)
-
-//NOT WORKING AS OF NOW
 //Task for releasing a build, will export to the releases directory
 task releaseJar(type: ShadowJar) {
-	description 'Build a release jar'
 	
-	classifier 'RELEASE'
+	relocate 'net.dv8tion', 'nl.thedutchmc.libs.dv8tion'
 	
-	destinationDir = file("$rootDir/releases")
+	description 'Build a release Jar'
+	archiveClassifier = 'RELEASE'
+	from sourceSets.main.output
+	configurations = [project.configurations.runtime]
+	destinationDirectory = file("$rootDir/releases")
 	
 }
 
-releaseJar.dependsOn(shadowJar)
-
-//NOT WORKING AS OF NOW
 //Task for testing a jar, will export to the plugins directory
 task testJar(type: ShadowJar) {
 	description 'Build a test jar, and put it into the plugins directory'
 	
-	classifier 'DEV'
+	relocate 'net.dv8tion', 'nl.thedutchmc.libs.dv8tion'
 	
-	doLast {
-		shadowJar
-	}
+	archiveClassifier = 'DEV'
+	from sourceSets.main.output
+	configurations = [project.configurations.runtime]
+	
+	destinationDirectory = file("$rootDir/server/plugins")
 }

@@ -1,5 +1,9 @@
 package nl.thedutchmc.discordCC.discordEvents;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -8,6 +12,7 @@ import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import nl.thedutchmc.discordCC.Channel;
 import nl.thedutchmc.discordCC.DiscordCC;
 import nl.thedutchmc.discordCC.JdaHandler;
 
@@ -25,19 +30,54 @@ public class MessageReceivedEventListener extends ListenerAdapter {
 			
 			String discordMessage = event.getMessage().getContentDisplay();
 			String msgEmojisTranslated = EmojiParser.parseToAliases(discordMessage);
+			
+			//we want to send the message to in-game players, but also to the console channel
 			DiscordCC.sendMessageToPlayers(event.getAuthor().getName() + ": " + msgEmojisTranslated);
+			DiscordCC.sendMessageToDiscord(event.getAuthor().getName() + ": " + msgEmojisTranslated, Channel.CONSOLE);
 			
 		//Messages from the console channel should be executed as commands
 		} else if(msgChannel.equals(JdaHandler.consoleChannel)) {
 			
 			if(event.getAuthor().isBot()) return;
 			
+			String message = event.getMessage().getContentDisplay();
+			
+			//if it's a say message, we want to send this message to the chat channel as well
+			//Though we have to strip off the "say" command itself
+			//Not using String#replace() because the message itself might contain the word say
+			if(message.startsWith("say")) {
+				List<String> parts = new LinkedList<>(Arrays.asList(message.split(" ")));
+				parts.remove(0);
+				
+				StringBuilder b = new StringBuilder();
+				for(String p : parts)
+					b.append(p + " ");
+
+				String trimmedMessage = b.toString();
+				DiscordCC.sendMessageToDiscord("**[Server]** " + trimmedMessage, Channel.CHAT);
+			}
+			
+			//if its a broadcast, we want to pass the message to the chat channel as well.
+			if(message.startsWith("broadcast")) {
+				List<String> parts = new LinkedList<>(Arrays.asList(message.split(" ")));
+				parts.remove(0);
+				
+				StringBuilder b = new StringBuilder();
+				for(String p : parts)
+					b.append(p + " ");
+				
+				String trimmedMessage = b.toString();
+				DiscordCC.sendMessageToDiscord("**[Broadcast]** " + trimmedMessage, Channel.CHAT);
+			}
+			
+			//Execute the command
+			//In a BukkitRunnable because this event thread is not sync with the server's main thread
 			new BukkitRunnable() {
 				
 				@Override
 				public void run() {
 					
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), event.getMessage().getContentDisplay());
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), message);
 				}
 			}.runTask(DiscordCC.INSTANCE);
 			

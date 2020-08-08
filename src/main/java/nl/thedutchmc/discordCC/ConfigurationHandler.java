@@ -10,7 +10,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigurationHandler {
 
-	public static String botToken, consoleChannel, chatChannel, ingamePrefixDiscordMessages, ingamePrefixDiscordMessagesHexColor;
+	public static String botToken, consoleChannel, chatChannel, 
+		ingamePrefixDiscordMessages, ingamePrefixDiscordMessagesHexColor,
+		playerJoinPrefix, playerLeavePrefix;
 	public static boolean consoleEnabled, chatEnabled;
 	
 	private File file;
@@ -49,6 +51,9 @@ public class ConfigurationHandler {
 		chatChannel = this.getConfig().getString("chatChannel");
 		ingamePrefixDiscordMessages = this.getConfig().getString("ingamePrefixDiscordMessages");
 		ingamePrefixDiscordMessagesHexColor = this.getConfig().getString("ingamePrefixDiscordMessagesHexColor");
+		
+		playerJoinPrefix = this.getConfig().getString("playerJoinPrefix");
+		playerLeavePrefix = this.getConfig().getString("playerLeavePrefix");
 		
 		consoleEnabled = Boolean.valueOf(this.getConfig().getString("consoleEnabled"));
 		chatEnabled = Boolean.valueOf(this.getConfig().getString("chatEnabled"));

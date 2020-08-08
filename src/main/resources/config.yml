@@ -7,6 +7,14 @@ consoleChannel: ""
 #The channel ID of the channel where regular chat be
 chatChannel: ""
 
+#The prefix used when a player joins. Default: ":heavy_plus_sign: "
+#This should have a trailing space!
+prefixPlayerJoin: ":heavy_plus_sign: "
+
+#The prefix used when a player leaves. Default: ":heavy_minus_sign: "
+#This should have a trailing space!
+prefixPlayerLeave: ":heavy_minus_sign: "
+
 #What prefix should messages in-game have. Default: [Discord]. This field may be left empty, but you do need to leave the quotation marks! 
 ingamePrefixDiscordMessages: "[Discord]"
 
