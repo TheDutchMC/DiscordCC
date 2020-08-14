@@ -1,4 +1,3 @@
-import org.apache.tools.ant.filters.ReplaceTokens
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
@@ -26,12 +25,6 @@ allprojects {
 		//Sonatype, required for the Bungee API, which comes with Spigot
 		maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 	}
-	
-	processResources {
-        from(sourceSets.main.resources.srcDirs) {
-            filter ReplaceTokens, tokens: [version: version]
-        }
-    }
 }
 
 dependencies {
@@ -54,28 +47,7 @@ dependencies {
 
 }
 
-//Task for releasing a build, will export to the releases directory
-task releaseJar(type: ShadowJar) {
-	
-	relocate 'net.dv8tion', 'nl.thedutchmc.libs.dv8tion'
-	
-	description 'Build a release Jar'
-	archiveClassifier = 'RELEASE'
-	from sourceSets.main.output
-	configurations = [project.configurations.runtime]
-	destinationDirectory = file("$rootDir/releases")
-	
-}
-
-//Task for testing a jar, will export to the plugins directory
-task testJar(type: ShadowJar) {
-	description 'Build a test jar, and put it into the plugins directory'
-	
-	relocate 'net.dv8tion', 'nl.thedutchmc.libs.dv8tion'
-	
-	archiveClassifier = 'DEV'
-	from sourceSets.main.output
-	configurations = [project.configurations.runtime]
-	
-	destinationDirectory = file("$rootDir/server/plugins")
+shadowJar {
+	classifier = ''
+	relocate 'net.dv8tion.jda', 'nl.thedutchmc.libs.jda'	
 }

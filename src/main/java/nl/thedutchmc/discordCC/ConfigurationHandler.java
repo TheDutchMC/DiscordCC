@@ -36,11 +36,11 @@ public class ConfigurationHandler {
 			config.load(file);
 			readConfig();
 		} catch (IOException e) {
-			System.err.println("[DiscordCC] Oei, we've got an IOException! Disabling the plugin. The stacktrace is as follows:");
+			DiscordCC.logWarn("[DiscordCC] Oei, we've got an IOException! Disabling the plugin. The stacktrace is as follows:");
 			Bukkit.getPluginManager().disablePlugin(DiscordCC.INSTANCE);
 			e.printStackTrace();
 		} catch (InvalidConfigurationException e) {
-			System.err.println("[DiscordCC] Ouch, you've got an error in your config! Disabling the plugin.");
+			DiscordCC.logWarn("[DiscordCC] Ouch, you've got an error in your config! Disabling the plugin.");
 			Bukkit.getPluginManager().disablePlugin(DiscordCC.INSTANCE);
 		}
 	}
@@ -51,7 +51,7 @@ public class ConfigurationHandler {
 		chatChannel = this.getConfig().getString("chatChannel");
 		ingamePrefixDiscordMessages = this.getConfig().getString("ingamePrefixDiscordMessages");
 		ingamePrefixDiscordMessagesHexColor = this.getConfig().getString("ingamePrefixDiscordMessagesHexColor");
-		
+				
 		playerJoinPrefix = this.getConfig().getString("playerJoinPrefix");
 		playerLeavePrefix = this.getConfig().getString("playerLeavePrefix");
 		
@@ -66,7 +66,7 @@ public class ConfigurationHandler {
 	}
 	
 	void invalidConfig() {
-		System.err.println("[DiscordCC] It seems a field is empty in config.yml! Disabling plugin");
+		DiscordCC.logWarn("[DiscordCC] It seems a field is empty in config.yml! Disabling plugin");
 		Bukkit.getPluginManager().disablePlugin(DiscordCC.INSTANCE);
 	}
 }

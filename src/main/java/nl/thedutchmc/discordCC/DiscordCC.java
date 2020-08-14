@@ -22,8 +22,6 @@ public class DiscordCC extends JavaPlugin {
 	
 	private static final ConsoleAppender consoleAppender = new ConsoleAppender();
 	private static final org.apache.logging.log4j.core.Logger rootLogger = (org.apache.logging.log4j.core.Logger) org.apache.logging.log4j.LogManager.getRootLogger();
-
-	//org.apache.logging.log4j.core.Logger logger = (Logger) org.apache.logging.log4j.LogManager.getRootLogger();
 	
 	@Override
 	public void onEnable() {
@@ -32,12 +30,17 @@ public class DiscordCC extends JavaPlugin {
 		configHandler = new ConfigurationHandler();
 		jdaHandler = new JdaHandler();
 		
+		logInfo("Welcome to DiscordCC version " + this.getDescription().getVersion() + " by TheDutchMC!");
+		
+		logInfo("Loading config...");
 		
 		//Load and read the configuration file
 		configHandler.loadConfig();
 
 		if(!this.isEnabled()) return;
 
+		logInfo("Connecting to the Discord API...");
+		
 		//Set up the JDA instance
 		jdaHandler.setupJda();
 		
@@ -63,6 +66,28 @@ public class DiscordCC extends JavaPlugin {
 	public void onDisable() {
 		sendMessageToDiscord(":octagonal_sign: **Server has stopped!**", Channel.CHAT, true);
 		sendMessageToDiscord("**Server has stopped!**", Channel.CONSOLE, true);
+		
+		final int DISCONNECT_DELAY = 3;
+		int delayLeft = DISCONNECT_DELAY;
+
+		logInfo("Giving message queue " + DISCONNECT_DELAY + " seconds to empty...");
+		
+		while(delayLeft > 0) {
+			try {
+				Thread.sleep(1000);
+				delayLeft--;
+			} catch (InterruptedException e) {
+				logWarn("There was an error gracefully shutting down the plugin!");
+			}
+		}
+		
+		logInfo("Disconnecting from Discord...");
+
+		try {
+			JdaHandler.shutdownJda();
+		} catch(Exception e) {}
+
+		logInfo("Thank you for using SkinFixer by TheDutchMC");				
 	}
 	
 	//This method is used by JDA events to send a message to all players
@@ -86,8 +111,8 @@ public class DiscordCC extends JavaPlugin {
 	//This method is used to send a message to a specific Discord channel
 	//Can throw InterruptedIOException during shutdown
 	public static void sendMessageToDiscord(String message, Channel channel, boolean... complete) {
-		MessageChannel msgChannel = null;
-				
+		MessageChannel msgChannel;
+						
 		switch(channel) {
 			case CONSOLE:
 				msgChannel = JdaHandler.consoleChannel;
@@ -95,11 +120,9 @@ public class DiscordCC extends JavaPlugin {
 			case CHAT:
 				msgChannel = JdaHandler.chatChannel;
 				break;
-		}
-		
-		if(msgChannel == null) {
-			System.err.println("[DiscordCC] Critical error! a MessageChannel is null. Shutting down the plugin!");
-			Bukkit.getPluginManager().disablePlugin(DiscordCC.INSTANCE);
+			default:
+				logWarn("[DiscordCC] There was an error sending a message to Discord. The message was aimed at Channel." + channel);
+				return;
 		}
 		
 		if(complete.length > 0 && complete[0]) {
@@ -107,5 +130,13 @@ public class DiscordCC extends JavaPlugin {
 		} else {
 			msgChannel.sendMessage(message).queue();
 		}
+	}
+	
+	public static void logInfo(String log) {
+		INSTANCE.getLogger().info(log);
+	}
+	
+	public static void logWarn(String log) {
+		INSTANCE.getLogger().warning(log);
 	}
 }

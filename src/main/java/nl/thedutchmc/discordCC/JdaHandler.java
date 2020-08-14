@@ -27,7 +27,7 @@ public class JdaHandler {
 			jda = builder.build();
 
 		} catch (LoginException e) {
-			System.err.println("[DiscordCC] Oei, we can't log in to Discord! Is your token valid? Disabling the plugin");
+			DiscordCC.logWarn("[DiscordCC] Oei, we can't log in to Discord! Is your token valid? Disabling the plugin");
 			Bukkit.getPluginManager().disablePlugin(DiscordCC.INSTANCE);
 		}
 		
@@ -49,5 +49,9 @@ public class JdaHandler {
 	
 	public void setJda(JDA jda) {
 		JdaHandler.jda = jda;
+	}
+	
+	public static void shutdownJda() throws Exception {
+		jda.shutdownNow();
 	}
 }

@@ -1,6 +1,8 @@
 package nl.thedutchmc.discordCC.discordEvents;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,9 +33,15 @@ public class MessageReceivedEventListener extends ListenerAdapter {
 			String discordMessage = event.getMessage().getContentDisplay();
 			String msgEmojisTranslated = EmojiParser.parseToAliases(discordMessage);
 			
+			String nickname = event.getGuild().getMemberById(event.getMember().getId()).getNickname();
+			if(nickname == null) nickname = event.getAuthor().getName(); 
+			
 			//we want to send the message to in-game players, but also to the console channel
-			DiscordCC.sendMessageToPlayers(event.getAuthor().getName() + ": " + msgEmojisTranslated);
-			DiscordCC.sendMessageToDiscord(event.getAuthor().getName() + ": " + msgEmojisTranslated, Channel.CONSOLE);
+			DiscordCC.sendMessageToPlayers(nickname + ": " + msgEmojisTranslated);
+			
+			final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+			String currTime = formatter.format(new Date());
+			DiscordCC.sendMessageToDiscord("[" + currTime + " INFO]: [DiscordCC] [Discord] " + nickname + ": " + msgEmojisTranslated, Channel.CONSOLE);
 			
 		//Messages from the console channel should be executed as commands
 		} else if(msgChannel.equals(JdaHandler.consoleChannel)) {
