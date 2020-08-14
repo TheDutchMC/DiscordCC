@@ -1,6 +1,6 @@
 name: DiscordCC
 main: nl.thedutchmc.discordCC.DiscordCC
-version: 2.1.2
+version: 2.1.3
 description: Allows you to manage your server's console from Discord and have a minecraft-discord chat link
 author: TheDutchMC
 api-version: 1.16

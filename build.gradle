@@ -49,5 +49,6 @@ dependencies {
 
 shadowJar {
 	classifier = ''
-	relocate 'net.dv8tion.jda', 'nl.thedutchmc.libs.jda'	
+	relocate 'net.dv8tion.jda', 'nl.thedutchmc.discordCC.libs.jda'
+	relocate 'com.vdurmont.emoji', 'nl.thedutchmc.discordCC.libs.emoji'
 }
