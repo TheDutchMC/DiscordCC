@@ -1,5 +1,8 @@
 package nl.thedutchmc.discordCC;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.security.auth.login.LoginException;
 
 import org.bukkit.Bukkit;
@@ -8,6 +11,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class JdaHandler {
 
@@ -19,12 +23,15 @@ public class JdaHandler {
 
 		//Set up the JDA instance and connect it to Discord
 		try {
-			JDABuilder builder = JDABuilder.createDefault(ConfigurationHandler.botToken);
 			
-			//Set the status to 'playing administering'
-			builder.setActivity(Activity.playing("Administering"));
+			//Specify the GatewayIntents we want to use
+			List<GatewayIntent> intents = new ArrayList<>();
+			intents.add(GatewayIntent.GUILD_MESSAGES);
 			
-			jda = builder.build();
+			jda = JDABuilder.createDefault(ConfigurationHandler.botToken)
+					.setActivity(Activity.playing("Administering"))
+					.enableIntents(intents)
+					.build();
 
 		} catch (LoginException e) {
 			DiscordCC.logWarn("[DiscordCC] Oei, we can't log in to Discord! Is your token valid? Disabling the plugin");
